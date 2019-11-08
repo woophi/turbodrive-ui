@@ -18,7 +18,6 @@ export function router(
   ) => Promise<void>,
   appNext: Server
 ) {
-  app.use('/favicon.ico', (_, res) => res.status(HTTPStatus.OK).sendFile('favicon.ico', options));
 
   app.get('/unsub/:id', (req, res) => {
     const actualPage = '/unsub/guest'
