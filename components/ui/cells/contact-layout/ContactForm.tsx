@@ -9,7 +9,6 @@ import { useTranslation } from 'server/lib/i18n';
 type ContactForm = {
   name: string;
   email: string;
-  message: string;
 };
 
 const validate = (values: ContactForm, t: (s: string) => string) => {
@@ -23,9 +22,6 @@ const validate = (values: ContactForm, t: (s: string) => string) => {
   }
   if (!values.name) {
     errors.name = t('common:forms.field.required');
-  }
-  if (!values.message) {
-    errors.message = t('common:forms.field.required');
   }
 
   return errors;
@@ -77,23 +73,6 @@ export const ContactForm: React.FC = () => {
                 margin="normal"
                 variant="outlined"
                 required
-                {...input}
-                error={Boolean(meta.touched && meta.error)}
-                helperText={meta.touched && meta.error}
-                disabled={submitting}
-              />
-            )}
-          />
-          <Field
-            name="message"
-            render={({ input, meta }) => (
-              <TextField
-                id="outlined-message-static"
-                label={t('common:forms.message')}
-                multiline
-                rows="4"
-                margin="normal"
-                variant="outlined"
                 {...input}
                 error={Boolean(meta.touched && meta.error)}
                 helperText={meta.touched && meta.error}
