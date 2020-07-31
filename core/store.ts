@@ -5,7 +5,7 @@ import {
   createStore,
   Reducer,
   ReducersMapObject,
-  Store
+  Store,
 } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { initialState, reducer as uiReducer } from 'core/reducers';
@@ -14,16 +14,16 @@ import { AppState, AppDispatch } from 'core/models';
 const middleware = applyMiddleware(thunk);
 
 const rootReducerMap: ReducersMapObject<AppState, AppDispatch> = {
-  ui: uiReducer
+  ui: uiReducer,
 };
 
-let asyncReducers: ReducersMapObject<any, any> = {};
+let asyncReducers: ReducersMapObject<Partial<AppState>, AppDispatch> = {};
 
 function updateRootReducer() {
   store.replaceReducer(
     combineReducers({
       ...rootReducerMap,
-      ...asyncReducers
+      ...asyncReducers,
     })
   );
 }
@@ -37,7 +37,7 @@ export function injectReducer<T>(name: string, reducer: Reducer<T>) {
 export function injectReducers(reducers: ReducersMapObject) {
   asyncReducers = {
     ...asyncReducers,
-    ...reducers
+    ...reducers,
   };
   updateRootReducer();
   return store;
@@ -49,8 +49,6 @@ export const store: Store<AppState, AppDispatch> = createStore(
   composeWithDevTools(middleware)
 ) as any;
 
-export const initStore = (
-  initState = { ui: initialState }
-): any => {
+export const initStore = (initState = { ui: initialState }): any => {
   return store;
 };
