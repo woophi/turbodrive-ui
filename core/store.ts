@@ -17,7 +17,7 @@ const rootReducerMap: ReducersMapObject<AppState, AppDispatch> = {
   ui: uiReducer
 };
 
-let asyncReducers: any = {};
+let asyncReducers: ReducersMapObject<any, any> = {};
 
 function updateRootReducer() {
   store.replaceReducer(
