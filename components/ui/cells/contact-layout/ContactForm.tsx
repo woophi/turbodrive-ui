@@ -38,7 +38,8 @@ const validate = (values: ContactForm, t: (s: string) => string) => {
 
 const onSubmit = async (data: ContactForm) => {
   try {
-    await sendMessage(data);
+    const { name, email } = data;
+    await sendMessage({ name, email });
   } catch (error) {
     return { [FORM_ERROR]: error.error };
   }
