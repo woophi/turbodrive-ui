@@ -4,7 +4,7 @@ import * as models from 'core/models';
 export const subscribe = (email: string) =>
   callApi<models.ResultSubscribe>('post', 'api/guest/subscribe', { email });
 
-export const sendMessage = (data: models.MessageModel) =>
+export const sendMessage = (data: Pick<models.MessageModel, 'email' | 'name'>) =>
   callApi<void>('post', `api/guest/send/message`, data);
 
 export const getBlogComments = (blogId: string) =>

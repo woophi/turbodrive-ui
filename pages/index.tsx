@@ -1,8 +1,13 @@
 import * as React from 'react';
+import { ContactForm } from 'ui/index';
 
 class Index extends React.Component {
   render() {
-    return <div>kek</div>;
+    return (
+      <div>
+        <ContactForm />
+      </div>
+    );
   }
 }
 

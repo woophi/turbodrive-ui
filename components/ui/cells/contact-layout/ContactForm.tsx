@@ -5,11 +5,13 @@ import { Form, Field } from 'react-final-form';
 import { testEmail } from 'core/lib';
 import { sendMessage } from 'core/operations';
 import { useTranslation } from 'server/lib/i18n';
+import { FORM_ERROR } from 'final-form';
 
 type ContactForm = {
   name: string;
   email: string;
   message: string;
+  message2: string;
 };
 
 const validate = (values: ContactForm, t: (s: string) => string) => {
@@ -27,12 +29,20 @@ const validate = (values: ContactForm, t: (s: string) => string) => {
   if (!values.message) {
     errors.message = t('common:forms.field.required');
   }
+  if (!values.message2) {
+    errors.message = t('common:forms.field.required');
+  }
 
   return errors;
 };
 
 const onSubmit = async (data: ContactForm) => {
-  await sendMessage(data);
+  try {
+    const { name, email } = data;
+    await sendMessage({ name, email });
+  } catch (error) {
+    return { [FORM_ERROR]: error.error };
+  }
 };
 
 export const ContactForm: React.FC = () => {
@@ -44,7 +54,7 @@ export const ContactForm: React.FC = () => {
       validate={(v: ContactForm) => validate(v, t)}
       render={({ handleSubmit, pristine, submitting, form }) => (
         <form
-          onSubmit={async event => await handleSubmit(event).then(form.reset)}
+          onSubmit={async (event) => await handleSubmit(event).then(form.reset)}
           className={classes.form}
         >
           <Field
@@ -101,6 +111,23 @@ export const ContactForm: React.FC = () => {
               />
             )}
           />
+          <Field
+            name="message2"
+            render={({ input, meta }) => (
+              <TextField
+                id="outlined-message-static"
+                label={t('common:forms.message')}
+                multiline
+                rows="4"
+                margin="normal"
+                variant="outlined"
+                {...input}
+                error={Boolean(meta.touched && meta.error)}
+                helperText={meta.touched && meta.error}
+                disabled={submitting}
+              />
+            )}
+          />
           <ButtonsForm pristine={pristine} submitting={submitting} />
         </form>
       )}
@@ -108,13 +135,13 @@ export const ContactForm: React.FC = () => {
   );
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   form: {
     margin: '2rem auto',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     minWidth: '320px',
-    maxWidth: '50%'
-  }
+    maxWidth: '50%',
+  },
 }));
